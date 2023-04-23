@@ -1,5 +1,5 @@
-const email = "putraindahkarya.konsultan@gmail.com"
-const phone = "0812-6220-0965"
+const email = "email@email.com"
+const phone = "+99 1234-5678-9"
 const links = [
   {
     id : 1,
@@ -42,7 +42,7 @@ const links = [
     ]
   },
 ];
-const address = "Jalan Karet 12 nomor 12 Simalingkar, Kel. Mangga, Kec. Medan Tuntungan"
+const address = "1234 Lorem Ipsum dummy text, 12345"
 const copyright = "2020 © Gan[Z]. All right reserved"
 const social_media = [
   {
