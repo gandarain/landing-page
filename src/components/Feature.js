@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Container, Row, Col } from "reactstrap";
 
 const FeatureBox = (props) => {
@@ -6,7 +6,7 @@ const FeatureBox = (props) => {
     <>
     {
       props.features.map((feature, key) =>
-      (feature.id % 2 !== 0) ?
+      (feature.id % 2 !== 0 && !props.isBreakpoint) ?
         <Row key={key} className={feature.id === 1 ? "align-items-center" : "align-items-center mt-5"}>
           <Col md={5} >
             <div>
@@ -48,13 +48,40 @@ const FeatureBox = (props) => {
   );
 }
 
-const Feature = () => {
+const useMediaQuery = (width) => {
+  const [targetReached, setTargetReached] = useState(false);
 
+  const updateTarget = useCallback((e) => {
+    if (e.matches) {
+      setTargetReached(true);
+    } else {
+      setTargetReached(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(`(max-width: ${width}px)`);
+    media.addListener(updateTarget);
+
+    // Check on mount (callback is not called until a change occurs)
+    if (media.matches) {
+      setTargetReached(true);
+    }
+
+    return () => media.removeListener(updateTarget);
+  }, []);
+
+  return targetReached;
+};
+
+const Feature = () => {
   const features = [
     {id : 1, img : "./images/45.png", title : "LOREM IPSUM", desc : "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.", link : "/"},
     {id : 2, img : "./images/46.png", title : "LOREM IPSUM", desc : "Sed perspiciatis unde omnis natus error voluptatem accusantium doloremque laudantium totam rem aperiam eaque ipsa quae ab illo excepturi sint occaecati cupiditate architecto.", link : "/"},
     {id : 3, img : "./images/45.png", title : "LOREM IPSUM", desc : "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.", link : "/"},
   ];
+
+  const isBreakpoint = useMediaQuery(768)
 
   return (
     <section className="section" id="feature">
@@ -67,7 +94,7 @@ const Feature = () => {
             </div>
           </Col>
         </Row>
-        <FeatureBox features={features} />
+        <FeatureBox features={features} isBreakpoint={isBreakpoint} />
       </Container>
     </section>
   );
